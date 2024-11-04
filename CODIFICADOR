@@ -1,0 +1,47 @@
+#Posible solucion al ejericio 10 de https://retosdeprogramacion.com/ejercicios/
+# Crea un programa que sea capaz de transformar texto natural a código
+#  morse y viceversa.
+#  - Debe detectar automáticamente de qué tipo se trata y realizar
+#    la conversión.
+#  - En morse se soporta raya "—", punto ".", un espacio " " entre letras
+#    o símbolos y dos espacios entre palabras "  ".
+#  - El alfabeto morse soportado será el mostrado en
+# https://es.wikipedia.org/wiki/C%C3%B3digo_morse#/media/Archivo:International_Morse_code.png
+
+import re
+def codificador_morse(texto):
+  alfabeto_morse = {"A":'.-', "B":"-...", "C":"-.-.", 
+                      "D":"-..", "E":".", "F":"..-.", 
+                      "G":"--.", "H":"....", "I":"..", 
+                      "J":".---", "K":"-.-", "L": ".-..", 
+                      "M":"--", "N":"-.", "Ñ":"--.--",
+                      "O":"---", "P":".--.", "Q":"--.-",
+                      "R":".-.", "S":"...", "T":"-",
+                      "U":"..-", "V":"...-", "W":".--", 
+                      "X":"-..-", "Y":"-.---", "Z":"--..", 
+                      "0":"-----", "1":".----", "2":"..---", 
+                      "3":"...--", "4":"....-", "5":".....",
+                      "6":"-....", "7":"--...", "8":"---..",
+                      "9":"----."}
+  resultado = []
+  if texto[0] in alfabeto_morse:
+    #Eliminamos los signos de puntuacion y ponemos las letras en mayusculas
+    texto_limpio = re.sub(r'[.,!?;¿¡"\'`-]', '', texto).upper()
+    for caracter in texto_limpio:
+      if caracter == " ":
+        resultado.append("  ")
+      else:
+        resultado.append(alfabeto_morse.get(caracter))
+    codificado = " ".join(resultado).replace(' ', '  ')
+    return codificado
+  else: #En caso de recibir un texto en codigo morse
+        #Damos la vuelta al diccionario
+    morse_a_texto = {valor: clave for clave, valor in alfabeto_morse.items()}
+    palabras_morse = texto.split("   ")
+    for palabra in palabras_morse:
+      caracteres = palabra.split(" ")
+      palabra_decodificada = ''.join(morse_a_texto.get(caracter, '') for caracter in caracteres)
+      resultado.append(palabra_decodificada)
+    texto_decodificado = ' '.join(resultado)
+    return texto_decodificado 
+      
